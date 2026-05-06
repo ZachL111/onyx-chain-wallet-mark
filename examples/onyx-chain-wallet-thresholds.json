@@ -1,0 +1,17 @@
+{
+  "repo": "onyx-chain-wallet-mark",
+  "thresholds": {
+    "signal": 4,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 5,
+    "ship": 179,
+    "watch": 96
+  },
+  "terms": [
+    "event finality",
+    "nonce pressure",
+    "settlement risk",
+    "proof depth"
+  ]
+}
