@@ -1,68 +1,40 @@
 # onyx-chain-wallet-mark
 
-`onyx-chain-wallet-mark` treats blockchain tooling as a local verification problem. The C implementation is intentionally narrow, but the fixtures and notes make the behavior explicit.
+`onyx-chain-wallet-mark` explores blockchain tooling with a small C codebase and local fixtures. The technical goal is to implement a C blockchain tooling project for wallet resource planning, using capacity fixtures and allocation and spill reports.
 
-## Onyx Chain Wallet Mark Checkpoints
+## Purpose
 
-Treat the compact fixture as the contract and the extended examples as a scratchpad. The code should stay boring enough that a change in behavior is obvious from the test output.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how event finality and settlement risk should influence a review result.
 
-## Architecture Notes
+## Onyx Chain Wallet Mark Review Notes
 
-The core is a scoring model over demand, capacity, latency, risk, and weight. That keeps contract state, event replay, and invariant checks in one explicit decision path. The threshold is 169, with risk penalty 4, latency penalty 2, and weight bonus 5. The C implementation keeps headers, source, and assertions separate so bounds and types are easy to review.
+The first comparison I would make is `settlement risk` against `event finality` because it shows where the rule is most opinionated.
 
-## What This Is For
+## What Is Covered
 
-I use this kind of project to make a rule visible before adding more machinery around it. The important part here is not the size of the codebase. It is that the input signals, scoring rule, fixture data, and expected output can all be checked in one sitting.
+- `fixtures/domain_review.csv` adds cases for event finality and nonce pressure.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/onyx-chain-wallet-walkthrough.md` walks through the case spread.
+- The C code includes a review path for `settlement risk` and `event finality`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Useful Pieces
+## Implementation Notes
 
-- Uses fixture data to keep event replay changes visible in code review.
-- Includes extended examples for invariant checks, including `surge` and `degraded`.
-- Documents settlement rules tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
+The fixture data drives the tests. The code stays thin, while `metadata/domain-review.json` and `config/review-profile.json` explain what each case is meant to protect.
 
-## Case Study
+The added C path is deliberately direct, with fixtures doing most of the explaining.
 
-`recovery` is the first example I would inspect because it lands on the `accept` path with a score of 244. The broader file also keeps `degraded` at 59 and `surge` at 274, which gives the model a useful low-to-high spread.
-
-## Project Layout
-
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-
-## Tooling
-
-Clone the repository, enter the directory, and run the verifier. No database server, cloud account, or token is required.
-
-## Local Workflow
+## Command
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
+## Audit Path
 
-## Quality Gate
+The check exercises the source code and the review fixture. `edge` is the high score at 221; `stale` is the low score at 134.
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+## Limits
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
-
-## Scope
-
-The fixture set is deliberately small. That keeps the review surface clear, but it also means the model should not be treated as a complete domain simulator.
-
-## Expansion Ideas
-
-- Add a short report command that prints the score breakdown for a single scenario.
-- Add malformed input fixtures so the failure path is as visible as the happy path.
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add one more blockchain tooling fixture that focuses on a malformed or borderline input.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.

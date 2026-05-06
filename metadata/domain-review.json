@@ -1,0 +1,73 @@
+{
+  "repo": "onyx-chain-wallet-mark",
+  "language": "C",
+  "category": "Blockchain tooling",
+  "goal": "Implement a C blockchain tooling project for wallet resource planning, using capacity fixtures and allocation and spill reports.",
+  "review_model": {
+    "terms": [
+      "event finality",
+      "nonce pressure",
+      "settlement risk",
+      "proof depth"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "event finality",
+      "signal": 66,
+      "slack": 52,
+      "drag": 16,
+      "confidence": 61,
+      "score": 197,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "nonce pressure",
+      "signal": 77,
+      "slack": 48,
+      "drag": 16,
+      "confidence": 49,
+      "score": 203,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "settlement risk",
+      "signal": 86,
+      "slack": 30,
+      "drag": 9,
+      "confidence": 46,
+      "score": 221,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "proof depth",
+      "signal": 64,
+      "slack": 46,
+      "drag": 29,
+      "confidence": 70,
+      "score": 157,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "event finality",
+      "signal": 59,
+      "slack": 21,
+      "drag": 31,
+      "confidence": 88,
+      "score": 134,
+      "lane": "watch"
+    }
+  ]
+}
